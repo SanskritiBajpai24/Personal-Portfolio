@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .calculator {
+            border: 2px solid #000;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 300px;
+        }
+
+        .display {
+            background-color: #222;
+            color: #fff;
+            text-align: right;
+            padding: 20px;
+            font-size: 2em;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+        }
+
+        .btn {
+            background-color: #e0e0e0;
+            border: 1px solid #000;
+            font-size: 1.5em;
+            padding: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .btn:active {
+            background-color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="btn" id="clear">C</button>
+            <button class="btn" id="divide">/</button>
+            <button class="btn" id="multiply">*</button>
+            <button class="btn" id="subtract">-</button>
+            <button class="btn" id="seven">7</button>
+            <button class="btn" id="eight">8</button>
+            <button class="btn" id="nine">9</button>
+            <button class="btn" id="add">+</button>
+            <button class="btn" id="four">4</button>
+            <button class="btn" id="five">5</button>
+            <button class="btn" id="six">6</button>
+            <button class="btn" id="one">1</button>
+            <button class="btn" id="two">2</button>
+            <button class="btn" id="three">3</button>
+            <button class="btn" id="equals">=</button>
+            <button class="btn" id="zero">0</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const display = document.getElementById('display');
+            let currentInput = '0';
+            let operator = '';
+            let previousInput = '';
+
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const value = button.innerText;
+
+                    if (value === 'C') {
+                        currentInput = '0';
+                        previousInput = '';
+                        operator = '';
+                        display.innerText = currentInput;
+                    } else if (value === '=') {
+                        if (currentInput !== '' && previousInput !== '' && operator !== '') {
+                            currentInput = calculate(parseFloat(previousInput), parseFloat(currentInput), operator).toString();
+                            display.innerText = currentInput;
+                            previousInput = '';
+                            operator = '';
+                        }
+                    } else if (['+', '-', '*', '/'].includes(value)) {
+                        if (currentInput !== '') {
+                            operator = value;
+                            previousInput = currentInput;
+                            currentInput = '0';
+                        }
+                    } else {
+                        if (currentInput === '0') {
+                            currentInput = value;
+                        } else {
+                            currentInput += value;
+                        }
+                        display.innerText = currentInput;
+                    }
+                });
+            });
+
+            function calculate(a, b, operator) {
+                switch (operator) {
+                    case '+':
+                        return a + b;
+                    case '-':
+                        return a - b;
+                    case '*':
+                        return a * b;
+                    case '/':
+                        return a / b;
+                    default:
+                        return 0;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
